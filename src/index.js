@@ -2,7 +2,7 @@ import { createLibp2p } from 'libp2p'
 import { tcp } from '@libp2p/tcp'
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
-import { multiaddr } from 'multiaddr'
+import { multiaddr } from '@multiformats/multiaddr'
 import { ping } from '@libp2p/ping'
 import { peerIdFromString } from '@libp2p/peer-id'
 const main = async () => {
@@ -33,8 +33,7 @@ const main = async () => {
     const ma = multiaddr(process.argv[2])
     console.log(`pinging remote peer at ${process.argv[2]}`)
 	await node.dial(ma)
-	const peerId=peerIdFromString(ma.getPeerId())
-    const latency = await node.services.ping.ping(peerId)
+    const latency = await node.services.ping.ping(ma)
     console.log(`pinged in ${latency / 1000000}ms`)
   } else {
     console.log('no remote peer address given, skipping ping')
